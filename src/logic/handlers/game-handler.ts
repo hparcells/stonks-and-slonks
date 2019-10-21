@@ -44,8 +44,8 @@ export function getGameInfo() {
 export function simulateDay() {
   state.day++;
 
-  for(let i = 0; i < state.player.ownedStonks.length; i++) {
-    state.player.ownedStonks[i].stonk.simulate();
+  for(let i = 0; i < state.stonkMarket.length; i++) {
+    state.stonkMarket[i].simulate();
   }
   
   // TODO: Random event check.
