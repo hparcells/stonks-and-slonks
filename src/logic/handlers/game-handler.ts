@@ -5,7 +5,6 @@ import { capitalize } from '@reverse/string';
 import buzzphrase from 'buzzphrase';
 
 import state, { setState } from "../state";
-import { TIMESCALE_MAP } from "./time-handler";
 import { Stock } from "../../stocks";
 
 /** Starts the game. */
