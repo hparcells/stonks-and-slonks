@@ -49,16 +49,16 @@ export class Stock {
   /** Simulates one day of a stock. Returns the stock price after the simulation. */
   simulate() {
     /** How much the stock will be changing. */
-    let change = Math.floor(Math.random() * this.margin);
+    const change = Math.floor(Math.random() * this.margin);
 
     /** How much the bias will be changing. */
-    let changeBias = Math.floor(Math.random() * this.settings.instability) + 1;
+    const changeBias = Math.floor(Math.random() * this.settings.instability) + 1;
 
     /** The deciding factor in whether the stock goes up or down in price. */
-    let random = Math.floor(Math.random() * 100);
+    const random = Math.floor(Math.random() * 100);
 
     /** Whether the "trend" will go up or down. */
-    let randomBias = Math.floor(Math.random() * 2);
+    const randomBias = Math.floor(Math.random() * 2);
 
     // Decides whether the stock will go up or down based on bias.
     if (random >= 0 && random <= this.bias) {
@@ -79,11 +79,11 @@ export class Stock {
     }
 
     // We wouldn't want a negative stock price now would we?
-    if (this.stockPrice < 0) this.stockPrice = 0;
+    if (this.stockPrice < 0) { this.stockPrice = 0; }
 
     // Makes sure the trends do not break the game.
-    if (this.bias < 0) this.bias = 0;
-    if (this.bias > 99) this.bias = 99;
+    if (this.bias < 0) { this.bias = 0; }
+    if (this.bias > 99) { this.bias = 99; }
 
     // Make sure the stock history does not get too long.
     if (this.stockHistory.length >= 50) {
@@ -100,8 +100,8 @@ export class Stock {
   /** Return the difference of the latest stocks */
   difference() {
     if (this.stockHistory.length > 1) {
-      let diff0 = this.stockHistory[this.stockHistory.length - 1];
-      let diff1 = this.stockHistory[this.stockHistory.length - 2];
+      const diff0 = this.stockHistory[this.stockHistory.length - 1];
+      const diff1 = this.stockHistory[this.stockHistory.length - 2];
       return diff0 - diff1;
     } else {
       // The history is not long enough.
@@ -112,11 +112,11 @@ export class Stock {
   triggerCrash(biasChange: number, percent: number) {
     this.bias -= biasChange;
     this.stockPrice -= Math.floor(this.stockPrice * (percent / 100));
-    if (this.bias < 0) this.bias = 0;
+    if (this.bias < 0) { this.bias = 0; }
   }
   triggerLuck(biasChange: number, percent: number) {
     this.bias += biasChange;
     this.stockPrice += Math.floor(this.stockPrice * (percent / 100));
-    if (this.bias > 99) this.bias = 99;
+    if (this.bias > 99) { this.bias = 99; }
   }
 }

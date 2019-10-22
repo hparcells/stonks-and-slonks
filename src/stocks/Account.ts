@@ -64,7 +64,7 @@ export class Account {
       // This stock is not owned.
       return false;
     }
-  };
+  }
 
   getStock(stock: Stock) {
     return this.stocks[stock.id] || 0;
