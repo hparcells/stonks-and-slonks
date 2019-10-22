@@ -4,8 +4,8 @@ import { randomInt } from '@reverse/random';
 import { capitalize } from '@reverse/string';
 import buzzphrase from 'buzzphrase';
 
-import state, { setState } from "../state";
-import { Stock } from "../../stocks";
+import { state, setState } from '../state';
+import { Stock } from '../../stocks';
 
 /** Starts the game. */
 export function startGame() {
@@ -41,9 +41,9 @@ export function getGameInfo() {
 export function simulateDay() {
   state.day++;
 
-  for(let i = 0; i < state.stonkMarket.length; i++) {
-    state.stonkMarket[i].simulate();
+  for(const stonk of state.stonkMarket) {
+    stonk.simulate();
   }
-  
+
   // TODO: Random event check.
 }

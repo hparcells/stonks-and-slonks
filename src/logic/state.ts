@@ -1,5 +1,5 @@
 // Stonks and Slonks Logic: State Type Def
-import { Stock } from "../stocks";
+import { Stock } from '../stocks';
 
 interface OwnedStonk {
   stonk: Stock;
@@ -7,19 +7,17 @@ interface OwnedStonk {
 }
 interface PlayerState {
   money: number;
-  ownedStonks: OwnedStonk[]
+  ownedStonks: OwnedStonk[];
 }
 interface GameState {
   player: PlayerState;
-  stonkMarket: Stock[]
+  stonkMarket: Stock[];
   day: number;
   startTime: number;
-};
+}
 
-let state: GameState = undefined as any;
+export let state: GameState = undefined as any;
 
 export function setState(newState: GameState) {
   state = newState;
 }
-
-export default state;

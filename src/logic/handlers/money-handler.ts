@@ -1,7 +1,7 @@
 // Stonks and Slonks Logic: Money Handler
 // This file contains all the functions to handle the player's money.
 
-import state from "../state";
+import { state } from '../state';
 
 /**
  * Adds to the amount of money the player has.

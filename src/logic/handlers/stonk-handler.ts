@@ -1,16 +1,16 @@
 // Stonks and Slonks Logic: Stonk Handler
 // This file contains all the functions for handing the buying and selling of Stonks.
 
-import { Stock } from "../../stocks";
+import { Stock } from '../../stocks';
 
-import state from "../state";
-import { removeMoney } from "./money-handler";
+import { state } from '../state';
+import { removeMoney } from './money-handler';
 
 /** Buys a Stonk. */
 export function buyStonk(stonk: Stock) {
   // Add the Stonk to the player's owned stonks.
   state.player.ownedStonks.push({
-    stonk: stonk,
+    stonk,
     boughtPrice: stonk.stockPrice
   });
 
