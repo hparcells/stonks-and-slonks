@@ -1,5 +1,6 @@
 import { start } from 'repl'
 import * as rawLogic from '../src/logic';
+import chalk from 'chalk';
 
 /** Removes [Object: null prototype] from the console.log */
 function clean(obj) {
@@ -16,7 +17,8 @@ function clean(obj) {
 const logic = clean(rawLogic);
 
 // Message
-console.clear();
+process.stdout.write('\n\n\n\n\n\n');
+process.stdout.write(chalk.green.bold('Compiled Successfully!\n'));
 console.log(
 `Inside of this program, you can mess around with the game logic stored in
 ./logic. All of the exports from ./logic/index.ts are available as globals

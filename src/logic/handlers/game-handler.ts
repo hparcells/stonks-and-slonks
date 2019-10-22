@@ -1,7 +1,7 @@
 // Stonks and Slonks Logic: Game Handler
 // This file contains all the functions for the game to start and retrival of data.
-import * as random from '@reverse/random';
-import * as string from '@reverse/string';
+import { randomInt } from '@reverse/random';
+import { capitalize } from '@reverse/string';
 import buzzphrase from 'buzzphrase';
 
 import state, { setState } from "../state";
@@ -23,12 +23,12 @@ export function startGame() {
   for(let i = 0; i < 4; i++) {
     state.stonkMarket.push(new Stock({
       name: buzzphrase.get().split(' ').map((word) => {
-        return string.capitalize(word);
+        return capitalize(word);
       }).join(' '),
-      margin: random.randomInt(10, 100),
-      availableStocks: random.randomInt(100, 250),
+      margin: randomInt(10, 100),
+      availableStocks: randomInt(100, 250),
       stockPrice: Number((Math.random() * (10 - 5) + 5).toFixed(2)),
-      instability: random.randomInt(5, 35)
+      instability: randomInt(5, 35)
     }));
   }
 }

@@ -16,7 +16,7 @@ interface GameState {
   startTime: number;
 };
 
-let state: GameState = {} as any;
+let state: GameState = undefined as any;
 
 export function setState(newState: GameState) {
   state = newState;

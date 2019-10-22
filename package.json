@@ -4,9 +4,10 @@
   "description": "Game of buying and selling",
   "private": true,
   "dependencies": {
-    "@reverse/random": "^1.0.9",
-    "@reverse/string": "^1.1.0",
+    "@reverse/random": "^1.0.10",
+    "@reverse/string": "^1.1.1",
     "buzzphrase": "^2.5.5",
+    "chalk": "^2.4.2",
     "uuid": "^3.3.3"
   },
   "devDependencies": {

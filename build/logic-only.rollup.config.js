@@ -23,7 +23,7 @@ export default {
     typescript({
       rollupCommonJSResolveHack: true
     }),
-    //
+    // make common js modules not fail
     commonjs(),
     // fix the import resolver because by default it doesn't work.
     resolve({
@@ -35,5 +35,11 @@ export default {
   output: {
     file: './out/logic-repl.js',
     format: 'cjs'
+  },
+  // dave black magic #1
+  external(...args) {
+    if(args[0] === 'repl') return true;
+    if(args[0] === 'os') return true;
+    return args.some(x => String(x).includes('node_modules'));
   }
 }

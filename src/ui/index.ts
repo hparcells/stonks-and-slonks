@@ -3,5 +3,5 @@
 import * as logic from '../logic';
 
 // ???
-logic.startGame();
-logic.simulateDay();
+logic.game.startGame();
+logic.game.simulateDay();
