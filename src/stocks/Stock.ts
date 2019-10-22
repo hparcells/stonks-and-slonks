@@ -20,7 +20,7 @@ export class Stock {
   /** Unique Identifier */
   id: string = uuid();
   /** The "trend" part of the stocks. */
-  bias: number;
+  bias = 0;
   /** Controls how much a stock is allowed to change in price. */
   margin: number;
   /** The identifier of the stock. Not necessarily unique. */
@@ -28,7 +28,7 @@ export class Stock {
   /** The current stock price. */
   stockPrice: number;
   /** The history of all the stock simulations. */
-  stockHistory: number[];
+  stockHistory: number[] = [];
   /** Stocks available for purchase. */
   availableStocks: number;
   /** Controls the max amount the bias will change. best results with 1-99 */

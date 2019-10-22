@@ -4,7 +4,4 @@ import * as logic from '../logic';
 
 // ???
 logic.startGame();
-
-setInterval(() => {
-  logic.simulateGame();
-}, 10000);
+logic.simulateDay();
