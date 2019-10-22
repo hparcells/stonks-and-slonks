@@ -22,6 +22,8 @@ export function buyStonk(stonk: Stock) {
 
 /** Sells a Stonk. */
 export function sellStonk(stonk: Stock) {
-  // TODO:
   throw new Error('Not implemented.');
+
+  // TODO: Remove player's money.
+  // TODO: Add to stonk market.
 }

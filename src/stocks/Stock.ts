@@ -6,6 +6,8 @@ import uuid from 'uuid/v4';
 export interface StockSettings {
   /** The visual name of the stock; */
   name: string;
+  /** The short letter code of the Stock. */
+  stockSymbol: string;
   /** The maximum amount of money the stock can drop or rise in value; */
   margin: number;
   /** The amount of the stock that is left to be bought. dont set to 0 if you want to buy it; */
@@ -25,6 +27,8 @@ export class Stock {
   margin: number;
   /** The identifier of the stock. Not necessarily unique. */
   name: string;
+  /** The short letter code of the Stock. */
+  stockSymbol: string;
   /** The current stock price. */
   stockPrice: number;
   /** The history of all the stock simulations. */
@@ -40,6 +44,7 @@ export class Stock {
   constructor(settings: StockSettings) {
     this.settings = settings;
     this.name = settings.name;
+    this.stockSymbol = settings.stockSymbol;
     this.margin = settings.margin;
     this.availableStocks = settings.availableStocks;
     this.stockPrice = settings.stockPrice;

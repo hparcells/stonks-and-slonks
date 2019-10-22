@@ -21,10 +21,17 @@ export function startGame() {
 
   // Generate four stock markets.
   for(let i = 0; i < 4; i++) {
+    const name = buzzphrase.get().split(' ').map((word) => {
+      return word.split('-').map((subword) => {
+        return capitalize(subword);
+      }).join('-');
+    }).join(' ');
+
     state.stonkMarket.push(new Stock({
-      name: buzzphrase.get().split(' ').map((word) => {
-        return capitalize(word);
-      }).join(' '),
+      name,
+      stockSymbol: name.split(' ').map((word) => {
+        return word.split('')[0];
+      }).join(''),
       margin: randomInt(10, 100),
       availableStocks: randomInt(100, 250),
       stockPrice: Number((Math.random() * (10 - 5) + 5).toFixed(2)),
