@@ -21,11 +21,23 @@ export function startGame() {
 
   // Generate four stock markets.
   for(let i = 0; i < 4; i++) {
-    const name = buzzphrase.get().split(' ').map((word) => {
-      return word.split('-').map((subword) => {
-        return capitalize(subword);
-      }).join('-');
-    }).join(' ');
+    function generateName() {
+      return buzzphrase.get().split(' ').map((word) => {
+        return word.split('-').map((subword) => {
+          return capitalize(subword);
+        }).join('-');
+      }).join(' ');
+    }
+
+    // Check if the name already exists.
+    const existingNames = state.stonkMarket.map((stonk) => {
+      return stonk.name;
+    });
+
+    let name;
+    do {
+      name = generateName();
+    }while(existingNames.includes(name));
 
     state.stonkMarket.push(new Stock({
       name,

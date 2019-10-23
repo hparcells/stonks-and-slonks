@@ -1,13 +1,9 @@
 // Stonks and Slonks Logic: State Type Def
 import { Stock } from '../stocks';
 
-interface OwnedStonk {
-  stonk: Stock;
-  boughtPrice: number;
-}
 interface PlayerState {
   money: number;
-  ownedStonks: OwnedStonk[];
+  ownedStonks: Stock[];
 }
 interface GameState {
   player: PlayerState;

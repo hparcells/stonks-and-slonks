@@ -4,6 +4,7 @@
   "description": "Game of buying and selling",
   "private": true,
   "dependencies": {
+    "@reverse/array": "^1.7.1",
     "@reverse/random": "^1.0.10",
     "@reverse/string": "^1.1.1",
     "buzzphrase": "^2.5.5",
