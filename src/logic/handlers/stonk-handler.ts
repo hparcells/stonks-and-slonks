@@ -7,11 +7,14 @@ import { Stock } from '../../stocks';
 import { state } from '../state';
 import { removeMoney, addMoney } from './money-handler';
 
-/** Buys a Stonk. */
+/**
+ * Buts a Stonk from the Stonk Market.
+ * @param stonk The Stonk to buy.
+ */
 export function buyStonk(stonk: Stock) {
   // If we do not have enough money.
   if(state.player.money < stonk.stockPrice) {
-    return;
+    throw new Error('Player does not have enough money.');
   }
 
   // Add the Stonk to the player's owned stonks.
@@ -30,8 +33,11 @@ export function buyStonk(stonk: Stock) {
   state.stonkMarket[index].availableStocks--;
 }
 
-/** Sells a Stonk. */
-export function sellStonk(stonk: Stock) {
+/**
+ * Sells a single Stonk.
+ * @param stonk The Stonk to sell.
+ */
+function sellStonk(stonk: Stock) {
   const stonkMarketIndex = state.stonkMarket.findIndex((stonkMarketStonk) => {
     return stonkMarketStonk.name === stonk.name;
   });
@@ -48,4 +54,19 @@ export function sellStonk(stonk: Stock) {
     return;
   }
   state.player.ownedStonks = removeAt(state.player.ownedStonks, stonkIndex);
+}
+
+/**
+ * Sells Stonks.
+ * @param stonk The Stonk to sell.
+ * @param quantity The amound of Stonks to sell.
+ */
+export function sellStonks(stonk: Stock, quantity: number) {
+  if(quantity < 0) {
+    throw new Error('Cannot sell a negative number of Stonks.');
+  }
+
+  for(let i = 0; i < quantity; i++) {
+    sellStonk(stonk);
+  }
 }

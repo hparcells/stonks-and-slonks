@@ -6,13 +6,15 @@ import buzzphrase from 'buzzphrase';
 
 import { state, setState } from '../state';
 import { Stock } from '../../stocks';
+import { isWeekday, getFormattedDate } from '../../utils/date-util';
 
 /** Starts the game. */
 export function startGame() {
   setState({
     player: {
       money: 100,
-      ownedStonks: []
+      ownedStonks: [],
+      minimumWage: 5
     },
     stonkMarket: [],
     day: 0,
@@ -39,6 +41,7 @@ export function startGame() {
       name = generateName();
     }while(existingNames.includes(name));
 
+    // Add the stock to the Stonk Market.
     state.stonkMarket.push(new Stock({
       name,
       stockSymbol: name.split(' ').map((word) => {
@@ -58,10 +61,17 @@ export function getGameInfo() {
 }
 /** Simulates one day unit of time. Should be called every 10 seconds. */
 export function simulateDay() {
+  // Increase the day count.
   state.day++;
 
+  // Simulate all the Stonks,
   for(const stonk of state.stonkMarket) {
     stonk.simulate();
+  }
+
+  // Add minimum wage to player's money if it is a weekday.
+  if(isWeekday(getFormattedDate())) {
+    state.player.money += state.player.minimumWage;
   }
 
   // TODO: Random event check.

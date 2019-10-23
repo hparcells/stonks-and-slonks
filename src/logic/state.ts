@@ -4,6 +4,7 @@ import { Stock } from '../stocks';
 interface PlayerState {
   money: number;
   ownedStonks: Stock[];
+  minimumWage: number;
 }
 interface GameState {
   player: PlayerState;
