@@ -1,5 +1,6 @@
 // Stonks and Slonks Logic: State Type Def
 import { Stock } from '../stocks';
+import { Market } from '../stocks/market';
 
 interface PlayerState {
   money: number;
@@ -8,7 +9,7 @@ interface PlayerState {
 }
 interface GameState {
   player: PlayerState;
-  stonkMarket: Stock[];
+  market: Market;
   day: number;
   startTime: number;
 }

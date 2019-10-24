@@ -13,7 +13,7 @@ import { removeMoney, addMoney } from './money-handler';
  */
 export function buyStonk(stonk: Stock) {
   // If we do not have enough money.
-  if(state.player.money < stonk.price.value) {
+  if(state.player.money < stonk.price) {
     throw new Error('Player does not have enough money.');
   }
 
@@ -21,16 +21,14 @@ export function buyStonk(stonk: Stock) {
   state.player.ownedStonks.push(stonk);
 
   // Removes the money from the player's money.
-  removeMoney(stonk.price.value);
+  removeMoney(stonk.price);
 
   // Remove from Stonk Market.
-  const index = state.stonkMarket.indexOf(stonk);
-
   // If the Stonk Market does not have enough Stonks.
-  if(state.stonkMarket[index].availableStocks < 1) {
-    return;
+  if(stonk.availableStocks < 1) {
+    throw new Error('Stonk Market does not have enough of this Stonk.');
   }
-  state.stonkMarket[index].availableStocks--;
+  stonk.availableStocks--;
 }
 
 /**
@@ -38,18 +36,24 @@ export function buyStonk(stonk: Stock) {
  * @param stonk The Stonk to sell.
  */
 function sellStonk(stonk: Stock) {
-  const stonkMarketIndex = state.stonkMarket.findIndex((stonkMarketStonk) => {
-    return stonkMarketStonk.name === stonk.name;
-  });
-  addMoney(state.stonkMarket[stonkMarketIndex].price.value - stonk.price.value);
+  // Add money gained or lost.
+  const marketStonk = state.market.getStockById(stonk.id);
+
+  if(!marketStonk) {
+    throw new Error('The Stonk does not exist in the market. This shouldn\'t happen.');
+  }
+  addMoney(marketStonk.price - stonk.price);
 
   // Add to stonk market.
-  state.stonkMarket[stonkMarketIndex].availableStocks++;
+  state.market.addStock(stonk);
 
   // Remove from player's owned stonks.
   const stonkIndex = state.player.ownedStonks.indexOf(stonk);
   if(state.player.ownedStonks[stonkIndex].availableStocks > 1) {
-    state.player.ownedStonks[stonkIndex].availableStocks--;
+    state.player.ownedStonks.push(stonk);
+
+    // Removes the money from the player's money.
+    removeMoney(stonk.price);
 
     return;
   }

@@ -4,9 +4,11 @@ import { randomInt } from '@reverse/random';
 import { capitalize } from '@reverse/string';
 import buzzphrase from 'buzzphrase';
 
-import { state, setState } from '../state';
+import { Market } from '../../stocks/market';
 import { Stock } from '../../stocks';
 import { isWeekday, getFormattedDate } from '../../utils/date-util';
+
+import { state, setState } from '../state';
 
 /** Starts the game. */
 export function startGame() {
@@ -16,13 +18,14 @@ export function startGame() {
       ownedStonks: [],
       minimumWage: 5
     },
-    stonkMarket: [],
+    market: new Market(),
     day: 0,
     startTime: Date.now()
   });
 
   // Generate four stock markets.
   for(let i = 0; i < 4; i++) {
+<<<<<<< HEAD
     function generateName() {
       return buzzphrase.get().split(' ').map((word) => {
         return word.split('-').map((subword) => {
@@ -58,6 +61,30 @@ export function startGame() {
       stockSymbol: name.split(' ').map((word) => {
         return word.split('')[0];
       }).join('')
+=======
+    const name = buzzphrase.get().split(' ').map((word) => {
+      return word.split('-').map((subword) => {
+        return capitalize(subword);
+      }).join('-');
+    }).join(' ');
+
+    state.market.addStock(new Stock({
+      name,
+      symbol: name.split(' ').map((word) => {
+        return word.split('')[0];
+      }).join(''),
+      historyMax: 200,
+      price: {
+        value: randomInt(500, 1000) / 100,
+        minChange: randomInt(50, 200) / 100,
+        maxChange: randomInt(200, 300) / 100
+      },
+      trend: {
+        value: randomInt(0, 99),
+        minChange: randomInt(35, 49),
+        maxChange: randomInt(50, 65)
+      }
+>>>>>>> master
     }));
   }
 }
@@ -71,10 +98,14 @@ export function simulateDay() {
   // Increase the day count.
   state.day++;
 
+<<<<<<< HEAD
   // Simulate all the Stonks,
   for(const stonk of state.stonkMarket) {
     stonk.simulate();
   }
+=======
+  state.market.simulate();
+>>>>>>> master
 
   // Add minimum wage to player's money if it is a weekday.
   if(isWeekday(getFormattedDate())) {

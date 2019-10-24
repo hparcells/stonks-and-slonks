@@ -1,11 +1,20 @@
 /**
  * @fileoverview This file creates stocks that can simulate trends.
- * @author Nathan Alex
+ * @author Nathan Alex (Original Author) and Dave Caruso
  */
+<<<<<<< HEAD
 import clamp from '../utils/clamp';
+=======
+import clamp from "../utils/clamp";
+import uuid from 'uuid/v4';
+>>>>>>> master
 
 /** The configuration of the stock. */
 export interface StockSettings {
+  /** The visual name of the stock. */
+  name: string;
+  /** The abbreviated symbol of the stock. */
+  symbol: string;
   /** The settings controlling the price simulation. */
   price: StockSettingsPrice;
   /** How many entries the history can hold. */
@@ -38,6 +47,7 @@ export interface StockSettingsTrend {
 
 /** Class representing a stock. */
 export class Stock {
+<<<<<<< HEAD
   history: number[];
   historyMax: number;
   name: string;
@@ -45,51 +55,70 @@ export class Stock {
   trend: StockSettingsTrend;
   availableStocks: number;
   stockSymbol: string;
+=======
+  /** A UUID Assigned to the stock. */
+  public id: string = uuid();
+  public symbol: string;
+  public history: number[];
+  public historyMax: number;
+  public name: string;
+  public isClosed: boolean;
+
+  private priceData: StockSettingsPrice;
+  private trendData: StockSettingsTrend;
+>>>>>>> master
 
   /**
    * Creates a stock that changes value every time a simulation is run.
-   * @param name The visual name of the stock.
    * @param settings The configuration of the stock.
    */
-  constructor(name: string, settings: StockSettings) {
+  constructor(settings: StockSettings) {
     this.history = [settings.price.value];
     this.historyMax = settings.historyMax;
+<<<<<<< HEAD
     this.name = name;
     this.price = settings.price;
     this.trend = settings.trend;
     this.availableStocks = settings.availableStocks;
     this.stockSymbol = settings.stockSymbol;
+=======
+    this.name = settings.name;
+    this.priceData = settings.price;
+    this.trendData = settings.trend;
+    this.symbol = settings.symbol;
+    this.isClosed = false;
+>>>>>>> master
   }
 
   /** Runs through a simulation of the stock. */
   simulate() {
     // The deciding factors of price and trend changes.
-    const priceChange = Math.floor(Math.random() * Math.floor(this.price.maxChange) + 1) + Math.floor(this.price.minChange);
-    const trendChange = Math.floor(Math.random() * Math.floor(this.trend.maxChange) + 1) + Math.floor(this.trend.minChange);
+    const priceChange = Math.floor(Math.random() * Math.floor(this.priceData.maxChange) + 1) + Math.floor(this.priceData.minChange);
+    const trendChange = Math.floor(Math.random() * Math.floor(this.trendData.maxChange) + 1) + Math.floor(this.trendData.minChange);
 
     // The deciding factors of price and trend differentials.
     const priceDiffie = Math.floor(Math.random() * 100);
     const trendDiffie = Math.floor(Math.random() * 2);
 
     // Calculate whether the price is going up or down.
-    if (priceDiffie >= 0 && priceDiffie <= this.trend.value) {
+    if (priceDiffie >= 0 && priceDiffie <= this.trendData.value) {
       // Increase the price of the stock.
-      this.price.value += priceChange;
+      this.priceData.value += priceChange;
     } else {
       // Decrease the price of the stock.
-      this.price.value -= priceChange;
-      this.price.value = clamp(this.price.value, 0);
+      this.priceData.value -= priceChange;
+      this.priceData.value = clamp(this.priceData.value, 0);
     }
 
     // Calculate whether the trend is going up or down.
     if (trendDiffie === 0) {
       // Increase the trend.
-      this.trend.value += trendChange;
-      this.trend.value = clamp(this.trend.value, 0, 99);
+      this.trendData.value += trendChange;
+      this.trendData.value = clamp(this.trendData.value, 0, 99);
     } else {
       // Decrease the trend.
-      this.trend.value -= trendChange;
-      this.trend.value = clamp(this.trend.value, 0, 99);
+      this.trendData.value -= trendChange;
+      this.trendData.value = clamp(this.trendData.value, 0, 99);
     }
 
     // Make sure the stock history does not get too long.
@@ -98,9 +127,28 @@ export class Stock {
     }
 
     // Push the new stock to the history.
-    this.history.push(this.price.value);
+    this.history.push(this.priceData.value);
 
     // Returns the current price of the stock.
-    return this.price.value;
+    return this.priceData.value;
+  }
+
+  /** Closes the stock */
+  close() {
+    this.isClosed = true;
+  }
+  /** Opens the stock */
+  open() {
+    this.isClosed = false;
+  }
+  toggleClose() {
+    this.isClosed = !this.isClosed;
+  }
+
+  get price() {
+    return this.priceData.value;
+  }
+  get trend() {
+    return this.trendData.value;
   }
 }
