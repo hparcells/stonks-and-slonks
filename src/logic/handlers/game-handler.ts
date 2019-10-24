@@ -42,15 +42,22 @@ export function startGame() {
     }while(existingNames.includes(name));
 
     // Add the stock to the Stonk Market.
-    state.stonkMarket.push(new Stock({
-      name,
+    state.stonkMarket.push(new Stock(name, {
+      historyMax: 100,
+      price: {
+        value: Number((Math.random() * (10 - 5) + 5).toFixed(2)),
+        maxChange: Infinity,
+        minChange: Infinity
+      },
+      trend: {
+        value: randomInt(5, 35),
+        maxChange: randomInt(5, 35),
+        minChange: randomInt(5, 35)
+      },
+      availableStocks: randomInt(100, 250),
       stockSymbol: name.split(' ').map((word) => {
         return word.split('')[0];
-      }).join(''),
-      margin: randomInt(10, 100),
-      availableStocks: randomInt(100, 250),
-      stockPrice: Number((Math.random() * (10 - 5) + 5).toFixed(2)),
-      instability: randomInt(5, 35)
+      }).join('')
     }));
   }
 }

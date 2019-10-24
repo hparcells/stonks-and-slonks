@@ -13,7 +13,7 @@ import { removeMoney, addMoney } from './money-handler';
  */
 export function buyStonk(stonk: Stock) {
   // If we do not have enough money.
-  if(state.player.money < stonk.stockPrice) {
+  if(state.player.money < stonk.price.value) {
     throw new Error('Player does not have enough money.');
   }
 
@@ -21,7 +21,7 @@ export function buyStonk(stonk: Stock) {
   state.player.ownedStonks.push(stonk);
 
   // Removes the money from the player's money.
-  removeMoney(stonk.stockPrice);
+  removeMoney(stonk.price.value);
 
   // Remove from Stonk Market.
   const index = state.stonkMarket.indexOf(stonk);
@@ -41,7 +41,7 @@ function sellStonk(stonk: Stock) {
   const stonkMarketIndex = state.stonkMarket.findIndex((stonkMarketStonk) => {
     return stonkMarketStonk.name === stonk.name;
   });
-  addMoney(state.stonkMarket[stonkMarketIndex].stockPrice - stonk.stockPrice);
+  addMoney(state.stonkMarket[stonkMarketIndex].price.value - stonk.price.value);
 
   // Add to stonk market.
   state.stonkMarket[stonkMarketIndex].availableStocks++;

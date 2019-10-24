@@ -2,7 +2,7 @@
  * @fileoverview This file creates stocks that can simulate trends.
  * @author Nathan Alex
  */
-import clamp from "../utils/clamp";
+import clamp from '../utils/clamp';
 
 /** The configuration of the stock. */
 export interface StockSettings {
@@ -12,6 +12,10 @@ export interface StockSettings {
   historyMax: number;
   /** The settings controlling the trend simulation. */
   trend: StockSettingsTrend;
+  /** How many stocks are available to buy. */
+  availableStocks: number;
+  /** The abbreviation for the stock. */
+  stockSymbol: string;
 }
 /** The settings controlling the price simulation. */
 export interface StockSettingsPrice {
@@ -39,6 +43,8 @@ export class Stock {
   name: string;
   price: StockSettingsPrice;
   trend: StockSettingsTrend;
+  availableStocks: number;
+  stockSymbol: string;
 
   /**
    * Creates a stock that changes value every time a simulation is run.
@@ -51,6 +57,8 @@ export class Stock {
     this.name = name;
     this.price = settings.price;
     this.trend = settings.trend;
+    this.availableStocks = settings.availableStocks;
+    this.stockSymbol = settings.stockSymbol;
   }
 
   /** Runs through a simulation of the stock. */
