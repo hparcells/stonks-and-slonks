@@ -2,12 +2,8 @@
  * @fileoverview This file creates stocks that can simulate trends.
  * @author Nathan Alex (Original Author) and Dave Caruso
  */
-<<<<<<< HEAD
 import clamp from '../utils/clamp';
-=======
-import clamp from "../utils/clamp";
 import uuid from 'uuid/v4';
->>>>>>> master
 
 /** The configuration of the stock. */
 export interface StockSettings {
@@ -47,15 +43,6 @@ export interface StockSettingsTrend {
 
 /** Class representing a stock. */
 export class Stock {
-<<<<<<< HEAD
-  history: number[];
-  historyMax: number;
-  name: string;
-  price: StockSettingsPrice;
-  trend: StockSettingsTrend;
-  availableStocks: number;
-  stockSymbol: string;
-=======
   /** A UUID Assigned to the stock. */
   public id: string = uuid();
   public symbol: string;
@@ -63,10 +50,10 @@ export class Stock {
   public historyMax: number;
   public name: string;
   public isClosed: boolean;
+  public availableStocks: number;
 
   private priceData: StockSettingsPrice;
   private trendData: StockSettingsTrend;
->>>>>>> master
 
   /**
    * Creates a stock that changes value every time a simulation is run.
@@ -75,19 +62,12 @@ export class Stock {
   constructor(settings: StockSettings) {
     this.history = [settings.price.value];
     this.historyMax = settings.historyMax;
-<<<<<<< HEAD
-    this.name = name;
-    this.price = settings.price;
-    this.trend = settings.trend;
-    this.availableStocks = settings.availableStocks;
-    this.stockSymbol = settings.stockSymbol;
-=======
     this.name = settings.name;
     this.priceData = settings.price;
     this.trendData = settings.trend;
     this.symbol = settings.symbol;
     this.isClosed = false;
->>>>>>> master
+    this.availableStocks = settings.availableStocks;
   }
 
   /** Runs through a simulation of the stock. */

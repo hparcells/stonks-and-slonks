@@ -1,4 +1,4 @@
-import { Stock } from "./stock";
+import { Stock } from './stock';
 
 /** A grouping of stocks. */
 export class Market {

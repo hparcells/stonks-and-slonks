@@ -25,43 +25,6 @@ export function startGame() {
 
   // Generate four stock markets.
   for(let i = 0; i < 4; i++) {
-<<<<<<< HEAD
-    function generateName() {
-      return buzzphrase.get().split(' ').map((word) => {
-        return word.split('-').map((subword) => {
-          return capitalize(subword);
-        }).join('-');
-      }).join(' ');
-    }
-
-    // Check if the name already exists.
-    const existingNames = state.stonkMarket.map((stonk) => {
-      return stonk.name;
-    });
-
-    let name;
-    do {
-      name = generateName();
-    }while(existingNames.includes(name));
-
-    // Add the stock to the Stonk Market.
-    state.stonkMarket.push(new Stock(name, {
-      historyMax: 100,
-      price: {
-        value: Number((Math.random() * (10 - 5) + 5).toFixed(2)),
-        maxChange: Infinity,
-        minChange: Infinity
-      },
-      trend: {
-        value: randomInt(5, 35),
-        maxChange: randomInt(5, 35),
-        minChange: randomInt(5, 35)
-      },
-      availableStocks: randomInt(100, 250),
-      stockSymbol: name.split(' ').map((word) => {
-        return word.split('')[0];
-      }).join('')
-=======
     const name = buzzphrase.get().split(' ').map((word) => {
       return word.split('-').map((subword) => {
         return capitalize(subword);
@@ -83,8 +46,11 @@ export function startGame() {
         value: randomInt(0, 99),
         minChange: randomInt(35, 49),
         maxChange: randomInt(50, 65)
-      }
->>>>>>> master
+      },
+      availableStocks: randomInt(100, 250),
+      stockSymbol: name.split(' ').map((word) => {
+        return word.split('')[0];
+      }).join('')
     }));
   }
 }
@@ -98,14 +64,7 @@ export function simulateDay() {
   // Increase the day count.
   state.day++;
 
-<<<<<<< HEAD
-  // Simulate all the Stonks,
-  for(const stonk of state.stonkMarket) {
-    stonk.simulate();
-  }
-=======
   state.market.simulate();
->>>>>>> master
 
   // Add minimum wage to player's money if it is a weekday.
   if(isWeekday(getFormattedDate())) {
