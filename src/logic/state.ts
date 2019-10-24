@@ -2,9 +2,14 @@
 import { Stock } from '../stocks';
 import { Market } from '../stocks/market';
 
+interface OwnedStonk {
+  name: string;
+  symbol: string;
+  count: number;
+}
 interface PlayerState {
   money: number;
-  ownedStonks: Stock[];
+  ownedStonks: OwnedStonk[];
   minimumWage: number;
 }
 interface GameState {

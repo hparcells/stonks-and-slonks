@@ -16,48 +16,33 @@ export function buyStonk(stonk: Stock) {
   if(state.player.money < stonk.price) {
     throw new Error('Player does not have enough money.');
   }
+  // If the Stonk Market does not have enough Stonks.
+  if(stonk.availableStocks < 1) {
+    throw new Error('Stonk Market does not have enough of this Stonk.');
+  }
 
   // Add the Stonk to the player's owned stonks.
-  state.player.ownedStonks.push(stonk);
+  if(state.player.ownedStonks.map((ownedStonk) => {
+    return ownedStonk.name;
+  }).includes(stonk.name)) {
+    const stonkIndex = state.player.ownedStonks.map((ownedStonk) => {
+      return ownedStonk.name;
+    }).indexOf(stonk.name);
+
+    state.player.ownedStonks[stonkIndex].count++;
+  }else {
+    state.player.ownedStonks.push({
+      name: stonk.name,
+      symbol: stonk.symbol,
+      count: 1
+    });
+  }
 
   // Removes the money from the player's money.
   removeMoney(stonk.price);
 
   // Remove from Stonk Market.
-  // If the Stonk Market does not have enough Stonks.
-  if(stonk.availableStocks < 1) {
-    throw new Error('Stonk Market does not have enough of this Stonk.');
-  }
   stonk.availableStocks--;
-}
-
-/**
- * Sells a single Stonk.
- * @param stonk The Stonk to sell.
- */
-function sellStonk(stonk: Stock) {
-  // Add money gained or lost.
-  const marketStonk = state.market.getStockById(stonk.id);
-
-  if(!marketStonk) {
-    throw new Error('The Stonk does not exist in the market. This shouldn\'t happen.');
-  }
-  addMoney(marketStonk.price - stonk.price);
-
-  // Add to stonk market.
-  state.market.addStock(stonk);
-
-  // Remove from player's owned stonks.
-  const stonkIndex = state.player.ownedStonks.indexOf(stonk);
-  if(state.player.ownedStonks[stonkIndex].availableStocks > 1) {
-    state.player.ownedStonks.push(stonk);
-
-    // Removes the money from the player's money.
-    removeMoney(stonk.price);
-
-    return;
-  }
-  state.player.ownedStonks = removeAt(state.player.ownedStonks, stonkIndex);
 }
 
 /**
@@ -65,12 +50,39 @@ function sellStonk(stonk: Stock) {
  * @param stonk The Stonk to sell.
  * @param quantity The amound of Stonks to sell.
  */
-export function sellStonks(stonk: Stock, quantity: number) {
+export function sellStonk(stonk: Stock, quantity: number = 1) {
+  // If we try to sell a negative number of Stonks.
   if(quantity < 0) {
     throw new Error('Cannot sell a negative number of Stonks.');
   }
 
-  for(let i = 0; i < quantity; i++) {
-    sellStonk(stonk);
+  const stonkIndex = state.player.ownedStonks.map((ownedStonk) => {
+    return ownedStonk.name;
+  }).indexOf(stonk.name);
+
+  // If we try to sell more Stonks than the player actually has.
+  if(state.player.ownedStonks[stonkIndex].count < quantity) {
+    throw new Error('Cannot sell more Stonks than the player actually has.');
   }
+
+  // Add money gained or lost.
+  const marketStonk = state.market.getStockById(stonk.id);
+
+  if(!marketStonk) {
+    throw new Error('The Stonk does not exist in the market. This should not happen.');
+  }
+  addMoney(marketStonk.price * quantity);
+
+  // Add to Stonk market.
+  state.market.stocks[state.market.stocks.map((marketStonk) => {
+    return marketStonk.name;
+  }).indexOf(stonk.name)].availableStocks -= quantity;
+
+  // Remove from player's owned stonks.
+  if(state.player.ownedStonks[stonkIndex].count > quantity) {
+    state.player.ownedStonks[stonkIndex].count -= quantity;
+
+    return;
+  }
+  state.player.ownedStonks = removeAt(state.player.ownedStonks, stonkIndex);
 }
