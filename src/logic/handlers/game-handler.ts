@@ -4,8 +4,10 @@ import { randomInt } from '@reverse/random';
 import { capitalize } from '@reverse/string';
 import buzzphrase from 'buzzphrase';
 
-import { state, setState } from '../state';
+import { Market } from '../../stocks/market';
 import { Stock } from '../../stocks';
+
+import { state, setState } from '../state';
 
 /** Starts the game. */
 export function startGame() {
@@ -14,7 +16,7 @@ export function startGame() {
       money: 100,
       ownedStonks: []
     },
-    stonkMarket: [],
+    market: new Market(),
     day: 0,
     startTime: Date.now()
   });
@@ -27,15 +29,22 @@ export function startGame() {
       }).join('-');
     }).join(' ');
 
-    state.stonkMarket.push(new Stock({
+    state.market.addStock(new Stock({
       name,
-      stockSymbol: name.split(' ').map((word) => {
+      symbol: name.split(' ').map((word) => {
         return word.split('')[0];
       }).join(''),
-      margin: randomInt(10, 100),
-      availableStocks: randomInt(100, 250),
-      stockPrice: Number((Math.random() * (10 - 5) + 5).toFixed(2)),
-      instability: randomInt(5, 35)
+      historyMax: 200,
+      price: {
+        value: randomInt(500, 1000) / 100,
+        minChange: randomInt(50, 200) / 100,
+        maxChange: randomInt(200, 300) / 100
+      },
+      trend: {
+        value: randomInt(0, 99),
+        minChange: randomInt(35, 49),
+        maxChange: randomInt(50, 65)
+      }
     }));
   }
 }
@@ -48,9 +57,7 @@ export function getGameInfo() {
 export function simulateDay() {
   state.day++;
 
-  for(const stonk of state.stonkMarket) {
-    stonk.simulate();
-  }
+  state.market.simulate();
 
   // TODO: Random event check.
 }

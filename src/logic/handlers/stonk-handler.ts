@@ -11,11 +11,11 @@ export function buyStonk(stonk: Stock) {
   // Add the Stonk to the player's owned stonks.
   state.player.ownedStonks.push({
     stonk,
-    boughtPrice: stonk.stockPrice
+    boughtPrice: stonk.price
   });
 
   // Removes the money from the player's money.
-  removeMoney(stonk.stockPrice);
+  removeMoney(stonk.price);
 
   // TODO: Remove from Stonk Market.
 }
