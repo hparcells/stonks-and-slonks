@@ -17,5 +17,8 @@ interface GameState {
 export let state: GameState = undefined as any;
 
 export function setState(newState: GameState) {
+  // dave black magic #2
+  'do blackmagic';
+
   state = newState;
 }

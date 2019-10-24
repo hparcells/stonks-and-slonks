@@ -40,7 +40,7 @@ function sellStonk(stonk: Stock) {
   const marketStonk = state.market.getStockById(stonk.id);
 
   if(!marketStonk) {
-    throw new Error('The Stonk does not exist in the market. This shouldn\'t happen.');
+    throw new Error('The Stonk does not exist in the market. This should not happen.');
   }
   addMoney(marketStonk.price - stonk.price);
 
