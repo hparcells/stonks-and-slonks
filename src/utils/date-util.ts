@@ -1,4 +1,4 @@
-import { state } from '../logic';
+import { state } from '../logic/state';
 
 /** Returns a date including day, month, date, and year. */
 export function getFormattedDate(): string {

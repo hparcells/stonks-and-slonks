@@ -8,8 +8,22 @@ import commonjs from 'rollup-plugin-commonjs';
 const removeShebang = (options = {}) => ({
   name: 'rollup-plugin-remove-shebang',
   transform: (code, id) => {
-    return code.replace(/[\s\n]*#!.*[\s\n]*/, '');
-  }
+    return {
+      code: code.replace(/[\s\n]*#!.*[\s\n]*/, ''),
+      map: null
+    }
+  },
+});
+
+// this does some black magic to make the state actually update in the REPL
+const blackmagicStateFix = (options = {}) => ({
+  name: 'rollup-plugin-blackmagic',
+  transform: (code, id) => {
+    return {
+      code: code.replace(/'do blackmagic'/, `(global as any).___updateState(newState);`),
+      map: null
+    }
+  },
 });
 
 // the config:
@@ -19,6 +33,8 @@ export default {
   plugins: [
     // remove the shebang
     removeShebang(),
+    // blackmagic
+    blackmagicStateFix(),
     // add typescript compiling
     typescript({
       rollupCommonJSResolveHack: true
@@ -34,7 +50,8 @@ export default {
   // output the file
   output: {
     file: './out/logic-repl.js',
-    format: 'cjs'
+    format: 'cjs',
+    sourcemap: true
   },
   // dave black magic #1
   external(...args) {
