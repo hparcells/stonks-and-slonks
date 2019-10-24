@@ -11,20 +11,5 @@
  * @returns The clamped number.
  */
 export default function clamp(value = 0, min = -Infinity, max = Infinity) {
-  let clampedValue = value;
-
-  // Check if the value is smaller than the minimum.
-  if (clampedValue < min) {
-    // The value is smaller.
-    clampedValue = min;
-  }
-
-  // Check if the value is bigger than the maximum.
-  if (clampedValue > max) {
-    // The value is bigger.
-    clampedValue = max;
-  }
-
-  // Return the clamped value.
-  return clampedValue;
+  return Math.min(Math.max(value, min), max);
 }
