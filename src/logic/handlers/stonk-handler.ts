@@ -10,15 +10,20 @@ import { removeMoney, addMoney } from './money-handler';
 /**
  * Buts a Stonk from the Stonk Market.
  * @param stonk The Stonk to buy.
+ * @param quantity The number of Stonks to buy.
  */
-export function buyStonk(stonk: Stock) {
+export function buyStonk(stonk: Stock, quantity: number = 1) {
   // If we do not have enough money.
-  if(state.player.money < stonk.price) {
+  if(state.player.money < stonk.price * quantity) {
     throw new Error('Player does not have enough money.');
   }
-  // If the Stonk Market does not have enough Stonks.
-  if(stonk.availableStocks < 1) {
-    throw new Error('Stonk Market does not have enough of this Stonk.');
+  // If we try and buy a negative amount of Stonks.
+  if(quantity < 0) {
+    throw new Error('Cannot buy a negative number of Stonks.');
+  }
+  // If we try and buy more Stonks than there are available.
+  if(stonk.availableStocks < quantity) {
+    throw new Error('The Stock Market does not have enough of that Stonk.');
   }
 
   // Add the Stonk to the player's owned stonks.
@@ -29,12 +34,12 @@ export function buyStonk(stonk: Stock) {
       return ownedStonk.name;
     }).indexOf(stonk.name);
 
-    state.player.ownedStonks[stonkIndex].count++;
+    state.player.ownedStonks[stonkIndex].count += quantity;
   }else {
     state.player.ownedStonks.push({
       name: stonk.name,
       symbol: stonk.symbol,
-      count: 1
+      count: quantity
     });
   }
 

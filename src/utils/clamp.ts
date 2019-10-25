@@ -10,6 +10,10 @@
  * @param max The biggest the number being clamped can be.
  * @returns The clamped number.
  */
-export default function clamp(value = 0, min = -Infinity, max = Infinity) {
+export default function clamp(value: number, min: number = -Infinity, max: number = Infinity): number {
+  if(min > max) {
+    throw new Error('Minumum value cannot be greater than the maximum value.');
+  }
+
   return Math.min(Math.max(value, min), max);
 }

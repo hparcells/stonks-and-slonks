@@ -73,7 +73,9 @@ export class Stock {
   /** Runs through a simulation of the stock. */
   simulate() {
     // The deciding factors of price and trend changes.
-    const priceChange = Math.floor(Math.random() * Math.floor(this.priceData.maxChange) + 1) + Math.floor(this.priceData.minChange);
+    const priceChange = (
+      Math.floor(Math.random() * Math.floor(this.priceData.maxChange * 100) + 1) + Math.floor(this.priceData.minChange * 100)
+    ) / 100;
     const trendChange = Math.floor(Math.random() * Math.floor(this.trendData.maxChange) + 1) + Math.floor(this.trendData.minChange);
 
     // The deciding factors of price and trend differentials.

@@ -6,7 +6,7 @@ import buzzphrase from 'buzzphrase';
 
 import { Market } from '../../stocks/market';
 import { Stock } from '../../stocks';
-import { isWeekday, getFormattedDate } from '../../utils/date-util';
+import { isWeekday, getFormattedDate } from '../../utils/date';
 
 import { state, setState } from '../state';
 
@@ -59,6 +59,7 @@ export function startGame() {
 export function getGameInfo() {
   return state;
 }
+
 /** Simulates one day unit of time. Should be called every 10 seconds. */
 export function simulateDay() {
   // Increase the day count.
