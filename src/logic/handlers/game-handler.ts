@@ -2,6 +2,7 @@
 // This file contains all the functions for the game to start and retrival of data.
 import { randomInt } from '@reverse/random';
 import { capitalize } from '@reverse/string';
+import { removeAt } from '@reverse/array';
 import buzzphrase from 'buzzphrase';
 
 import { Market } from '../../stocks/market';
@@ -11,12 +12,21 @@ import { isWeekday, getFormattedDate, isLastDay } from '../../utils/date';
 import { state, setState } from '../state';
 
 export function addNewStonk() {
-  const name = buzzphrase.get().split(' ').map((word) => {
-    return word.split('-').map((subword) => {
-      return capitalize(subword);
-    }).join('-');
-  }).join(' ');
+  // Generate a name.
+  let name;
 
+  // Keep generating names until we get a unique one.
+  do {
+    name = buzzphrase.get().split(' ').map((word) => {
+      return word.split('-').map((subword) => {
+        return capitalize(subword);
+      }).join('-');
+    }).join(' ');
+  }while(state.market.stocks.map((stonk) => {
+    return stonk.name;
+  }).includes(name));
+
+  // Add the Stonk to the Stonk Market.
   state.market.addStock(new Stock({
     name,
     symbol: name.split(' ').map((word) => {
@@ -46,7 +56,7 @@ export function startGame() {
     player: {
       money: 100,
       ownedStonks: [],
-      income: [{ name: 'Job', amount: 5, occurrence: 'daily' }],
+      income: [{ name: 'Job', amount: 5, occurrence: 'daily', endIn: -1 }],
       // TODO: Add bills here.
       expenses: []
     },
@@ -97,6 +107,16 @@ export function simulateDay() {
       || (incomeSource.occurrence === 'annually' && getFormattedDate().includes('Dec 31'))
     ) {
       state.player.money += incomeSource.amount;
+
+      if(incomeSource.endIn > 0) {
+        incomeSource.endIn--;
+
+        if(incomeSource.endIn === 0) {
+          const incomeIndex = state.player.income.indexOf(incomeSource);
+
+          state.player.income = removeAt(state.player.income, incomeIndex);
+        }
+      }
     }
   });
 
@@ -109,6 +129,16 @@ export function simulateDay() {
       || (expense.occurrence === 'annually' && getFormattedDate().includes('Dec 31'))
     ) {
       state.player.money -= expense.cost;
+
+      if(expense.endIn > 0) {
+        expense.endIn--;
+
+        if(expense.endIn === 0) {
+          const expenseIndex = state.player.expenses.indexOf(expense);
+
+          state.player.income = removeAt(state.player.income, expenseIndex);
+        }
+      }
     }
   });
 
