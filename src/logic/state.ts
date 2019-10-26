@@ -1,5 +1,4 @@
 // Stonks and Slonks Logic: State Type Def
-import { Stock } from '../stocks';
 import { Market } from '../stocks/market';
 
 interface OwnedStonk {
@@ -17,6 +16,7 @@ interface GameState {
   market: Market;
   day: number;
   startTime: number;
+  addNewStonkDay: number;
 }
 
 export let state: GameState = undefined as any;

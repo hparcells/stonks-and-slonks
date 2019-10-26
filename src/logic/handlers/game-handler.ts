@@ -10,6 +10,36 @@ import { isWeekday, getFormattedDate } from '../../utils/date';
 
 import { state, setState } from '../state';
 
+export function addNewStonk() {
+  const name = buzzphrase.get().split(' ').map((word) => {
+    return word.split('-').map((subword) => {
+      return capitalize(subword);
+    }).join('-');
+  }).join(' ');
+
+  state.market.addStock(new Stock({
+    name,
+    symbol: name.split(' ').map((word) => {
+      return word.split('')[0];
+    }).join(''),
+    historyMax: 200,
+    price: {
+      value: randomInt(500, 1000) / 100,
+      minChange: randomInt(50, 200) / 100,
+      maxChange: randomInt(200, 300) / 100
+    },
+    trend: {
+      value: randomInt(0, 99),
+      minChange: randomInt(35, 49),
+      maxChange: randomInt(50, 65)
+    },
+    availableStocks: randomInt(100, 250),
+    stockSymbol: name.split(' ').map((word) => {
+      return word.split('')[0];
+    }).join('')
+  }));
+}
+
 /** Starts the game. */
 export function startGame() {
   setState({
@@ -20,38 +50,13 @@ export function startGame() {
     },
     market: new Market(),
     day: 0,
-    startTime: Date.now()
+    startTime: Date.now(),
+    addNewStonkDay: randomInt(60, 90)
   });
 
   // Generate four stock markets.
   for(let i = 0; i < 4; i++) {
-    const name = buzzphrase.get().split(' ').map((word) => {
-      return word.split('-').map((subword) => {
-        return capitalize(subword);
-      }).join('-');
-    }).join(' ');
-
-    state.market.addStock(new Stock({
-      name,
-      symbol: name.split(' ').map((word) => {
-        return word.split('')[0];
-      }).join(''),
-      historyMax: 200,
-      price: {
-        value: randomInt(500, 1000) / 100,
-        minChange: randomInt(50, 200) / 100,
-        maxChange: randomInt(200, 300) / 100
-      },
-      trend: {
-        value: randomInt(0, 99),
-        minChange: randomInt(35, 49),
-        maxChange: randomInt(50, 65)
-      },
-      availableStocks: randomInt(100, 250),
-      stockSymbol: name.split(' ').map((word) => {
-        return word.split('')[0];
-      }).join('')
-    }));
+    addNewStonk();
   }
 }
 
@@ -65,11 +70,20 @@ export function simulateDay() {
   // Increase the day count.
   state.day++;
 
+  // Simulate the market.
   state.market.simulate();
 
   // Add minimum wage to player's money if it is a weekday.
   if(isWeekday(getFormattedDate())) {
     state.player.money += state.player.minimumWage;
+  }
+
+  // Add a new Stonk if we waited long enough.
+  if(state.addNewStonkDay === state.day) {
+    addNewStonk();
+
+    // Set the new day.
+    state.addNewStonkDay += randomInt(60, 90);
   }
 
   // TODO: Random event check.
