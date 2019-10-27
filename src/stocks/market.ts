@@ -2,6 +2,7 @@ import { Stock } from './stock';
 
 /** A grouping of stocks. */
 export class Market {
+  /** The Stocks the market has. */
   public stocks: Stock[] = [];
 
   public constructor() {}

@@ -19,7 +19,10 @@ interface Expense {
   cost: number;
   /** How ofthen this expense will be triggered. */
   occurrence: Occurrence;
-  /** The amount of times with expense will be triggered before it gets removed. */
+  /**
+   * The amount of times with expense will be triggered before it gets removed.
+   * Use -1 to never be removed.
+   */
   endIn: number;
 }
 interface Income {
@@ -29,7 +32,10 @@ interface Income {
   amount: number;
   /** How often should this income source trigger. */
   occurrence: Occurrence;
-  /** The amount of times this income source will be triggered before it gets removed. */
+  /**
+   * The amount of times this income source will be triggered before it gets removed.
+   * Use -1 to never be removed.
+   */
   endIn: number;
 }
 interface PlayerState {

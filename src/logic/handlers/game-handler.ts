@@ -6,12 +6,43 @@ import { removeAt } from '@reverse/array';
 import buzzphrase from 'buzzphrase';
 
 import { Market } from '../../stocks/market';
-import { Stock } from '../../stocks';
+import { Stock, StockSettingsPrice, StockSettingsTrend } from '../../stocks';
 import { isWeekday, getFormattedDate, isLastDay } from '../../utils/date';
 
 import { state, setState } from '../state';
 
-export function addNewStonk() {
+type StonkPreset = 'starter';
+
+const STONK_PRESETS: { [Preset in StonkPreset]: StonkGenerationSettings } = {
+  starter: {
+    historyMax: 200,
+    price: {
+      value: randomInt(500, 1000) / 100,
+      minChange: randomInt(50, 200) / 100,
+      maxChange: randomInt(200, 300) / 100
+    },
+    trend: {
+      value: randomInt(0, 99),
+      minChange: randomInt(35, 49),
+      maxChange: randomInt(50, 65)
+    },
+    availableStocks: randomInt(100, 250)
+  }
+};
+
+export interface StonkGenerationSettings {
+  /** The settings controlling the price simulation. */
+  price: StockSettingsPrice;
+  /** How many entries the history can hold. */
+  historyMax: number;
+  /** The settings controlling the trend simulation. */
+  trend: StockSettingsTrend;
+  /** How many stocks are available to buy. */
+  availableStocks: number;
+}
+
+/** Adds a new Stonk to the Stonk Market. */
+export function addNewStonk(settings: StonkGenerationSettings) {
   // Generate a name.
   let name;
 
@@ -26,27 +57,30 @@ export function addNewStonk() {
     return stonk.name;
   }).includes(name));
 
+  let symbol = name.split(' ').map((word) => {
+    return word.split('')[0];
+  }).join('');
+
+  if(state.market.stocks.map((marketStonk) => {
+    return marketStonk.symbol;
+  }).includes(symbol)) {
+    symbol = symbol + '-';
+
+    do {
+      symbol = symbol + randomInt(0, 9);
+    }while(state.market.stocks.map((marketStonk) => {
+      return marketStonk.symbol;
+    }).includes(symbol));
+  }
+
   // Add the Stonk to the Stonk Market.
   state.market.addStock(new Stock({
     name,
-    symbol: name.split(' ').map((word) => {
-      return word.split('')[0];
-    }).join(''),
+    symbol,
     historyMax: 200,
-    price: {
-      value: randomInt(500, 1000) / 100,
-      minChange: randomInt(50, 200) / 100,
-      maxChange: randomInt(200, 300) / 100
-    },
-    trend: {
-      value: randomInt(0, 99),
-      minChange: randomInt(35, 49),
-      maxChange: randomInt(50, 65)
-    },
-    availableStocks: randomInt(100, 250),
-    stockSymbol: name.split(' ').map((word) => {
-      return word.split('')[0];
-    }).join('')
+    price: settings.price,
+    trend: settings.trend,
+    availableStocks: settings.availableStocks
   }));
 }
 
@@ -68,7 +102,7 @@ export function startGame() {
 
   // Generate four stock markets.
   for(let i = 0; i < 4; i++) {
-    addNewStonk();
+    addNewStonk(STONK_PRESETS.starter);
   }
 }
 
@@ -87,12 +121,15 @@ export function simulateDay() {
 
   // Add minimum wage to player's money if it is a weekday.
   if(isWeekday(getFormattedDate())) {
-    state.player.money += state.player.income[0].amount;
+    const jobIndex = state.player.income.map((incomeSource) => {
+      return incomeSource.name;
+    }).indexOf('Job');
+    state.player.money += state.player.income[jobIndex].amount;
   }
 
   // Add a new Stonk if we waited long enough.
   if(state.addNewStonkDay === state.day) {
-    addNewStonk();
+    addNewStonk(STONK_PRESETS.starter);
 
     // Set the new day.
     state.addNewStonkDay += randomInt(60, 90);

@@ -19,8 +19,6 @@ export interface StockSettings {
   trend: StockSettingsTrend;
   /** How many stocks are available to buy. */
   availableStocks: number;
-  /** The abbreviation for the stock. */
-  stockSymbol: string;
 }
 /** The settings controlling the price simulation. */
 export interface StockSettingsPrice {
