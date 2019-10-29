@@ -90,14 +90,56 @@ export function startGame() {
     player: {
       money: 100,
       ownedStonks: [],
-      income: [{ name: 'Job', amount: 5, occurrence: 'daily', endIn: -1 }],
-      // TODO: Add bills here.
+      income: [{ name: 'Job', amount: () => 5, occurrence: 'daily', endIn: -1 }],
       expenses: []
     },
     market: new Market(),
     day: 0,
     startTime: Date.now(),
-    addNewStonkDay: randomInt(60, 90)
+    addNewStonkDay: randomInt(60, 90),
+    incomeTax: 0.1
+  });
+
+  // Add bills.
+  state.player.expenses.push(
+    {
+      name: 'Utility: Electricity',
+      cost: () => 100,
+      occurrence: 'monthly',
+      endIn: -1
+    },
+    {
+      name: 'Utility: Gas',
+      cost: () => 100,
+      occurrence: 'monthly',
+      endIn: -1
+    },
+    {
+      name: 'Utility: Internet',
+      cost: () => 60,
+      occurrence: 'monthly',
+      endIn: -1
+    },
+    {
+      name: 'Utility: Water',
+      cost: () => 70,
+      occurrence: 'monthly',
+      endIn: -1
+    }
+  );
+
+  // Add other expenses.
+  state.player.expenses.push({
+    name: 'Income Tax',
+    cost: () => {
+      const jobIndex = state.player.income.map((incomeSource) => {
+        return incomeSource.name;
+      }).indexOf('Job');
+
+      return state.player.income[jobIndex].amount() * state.incomeTax;
+    },
+    occurrence: 'daily',
+    endIn: -1
   });
 
   // Generate four stock markets.
@@ -124,7 +166,7 @@ export function simulateDay() {
     const jobIndex = state.player.income.map((incomeSource) => {
       return incomeSource.name;
     }).indexOf('Job');
-    state.player.money += state.player.income[jobIndex].amount;
+    state.player.money += state.player.income[jobIndex].amount();
   }
 
   // Add a new Stonk if we waited long enough.
@@ -143,7 +185,7 @@ export function simulateDay() {
       || (incomeSource.occurrence === 'monthly' && isLastDay(new Date(state.startTime + (86400000 * state.day))))
       || (incomeSource.occurrence === 'annually' && getFormattedDate().includes('Dec 31'))
     ) {
-      state.player.money += incomeSource.amount;
+      state.player.money += incomeSource.amount();
 
       if(incomeSource.endIn > 0) {
         incomeSource.endIn--;
@@ -165,7 +207,7 @@ export function simulateDay() {
       || (expense.occurrence === 'monthly' && isLastDay(new Date(state.startTime + (86400000 * state.day))))
       || (expense.occurrence === 'annually' && getFormattedDate().includes('Dec 31'))
     ) {
-      state.player.money -= expense.cost;
+      state.player.money -= expense.cost();
 
       if(expense.endIn > 0) {
         expense.endIn--;

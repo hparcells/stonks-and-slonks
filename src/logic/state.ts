@@ -16,7 +16,7 @@ interface Expense {
   /** The name of this expense/ */
   name: string;
   /** How much money should be removed from the player. */
-  cost: number;
+  cost: () => number;
   /** How ofthen this expense will be triggered. */
   occurrence: Occurrence;
   /**
@@ -29,7 +29,7 @@ interface Income {
   /** The name of the income source. */
   name: string;
   /** How much money the income source will give. */
-  amount: number;
+  amount: () => number;
   /** How often should this income source trigger. */
   occurrence: Occurrence;
   /**
@@ -59,6 +59,8 @@ interface GameState {
   startTime: number;
   /** How many days away when a new Stonk will get added. */
   addNewStonkDay: number;
+  /** The amount of income tax charged daily. */
+  incomeTax: number;
 }
 
 export let state: GameState = undefined as any;
