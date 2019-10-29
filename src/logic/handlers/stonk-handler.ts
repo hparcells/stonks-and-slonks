@@ -11,8 +11,9 @@ import { removeMoney, addMoney } from './money-handler';
  * Buts a Stonk from the Stonk Market.
  * @param stonk The Stonk to buy.
  * @param quantity The number of Stonks to buy.
+ * @param forceBuy Whether or not the bypass the closed Stonk check.
  */
-export function buyStonk(stonk: Stock, quantity: number = 1) {
+export function buyStonk(stonk: Stock, quantity: number = 1, forceBuy: boolean = false) {
   // If we do not have enough money.
   if(state.player.money < stonk.price * quantity) {
     throw new Error('Player does not have enough money.');
@@ -23,7 +24,11 @@ export function buyStonk(stonk: Stock, quantity: number = 1) {
   }
   // If we try and buy more Stonks than there are available.
   if(stonk.availableStocks < quantity) {
-    throw new Error('The Stock Market does not have enough of that Stonk.');
+    throw new Error('The Stonk Market does not have enough of that Stonk.');
+  }
+  // Check if the Stonk is closed or not.
+  if(stonk.isClosed && !forceBuy) {
+    throw new Error('The requested Stonk is closed and is unable to be bought.');
   }
 
   // Add the Stonk to the player's owned stonks.
