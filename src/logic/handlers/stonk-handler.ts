@@ -35,12 +35,14 @@ export function buyStonk(stonk: Stock, quantity: number = 1, forceBuy: boolean =
   if(state.player.ownedStonks.map((ownedStonk) => {
     return ownedStonk.name;
   }).includes(stonk.name)) {
+    // If the player has at least one of these Stonks already.
     const stonkIndex = state.player.ownedStonks.map((ownedStonk) => {
       return ownedStonk.name;
     }).indexOf(stonk.name);
 
     state.player.ownedStonks[stonkIndex].count += quantity;
   }else {
+    // If the Stonk doesn't exist in the player's owned Stonks.
     state.player.ownedStonks.push({
       name: stonk.name,
       symbol: stonk.symbol,

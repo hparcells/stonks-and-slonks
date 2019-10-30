@@ -5,11 +5,12 @@ import { capitalize } from '@reverse/string';
 import { removeAt } from '@reverse/array';
 import buzzphrase from 'buzzphrase';
 
-import { Market } from '../../stocks/market';
-import { Stock, StockSettingsPrice, StockSettingsTrend } from '../../stocks';
-import { isWeekday, getFormattedDate, isLastDay } from '../../utils/date';
-
+import { checkRandomEvent } from './random-event-hander';
 import { state, setState } from '../state';
+import { Stock, StockSettingsPrice, StockSettingsTrend } from '../../stocks';
+import { Market } from '../../stocks/market';
+
+import { isWeekday, getFormattedDate, isLastDay } from '../../utils/date';
 
 type StonkPreset = 'starter';
 
@@ -97,7 +98,8 @@ export function startGame() {
     day: 0,
     startTime: Date.now(),
     addNewStonkDay: randomInt(60, 90),
-    incomeTax: 0.1
+    incomeTax: 0.1,
+    randomEvent: undefined as any
   });
 
   // Add bills.
@@ -221,5 +223,6 @@ export function simulateDay() {
     }
   });
 
-  // TODO: Random event check.
+  // Check if we should trigger a random event.
+  checkRandomEvent();
 }
